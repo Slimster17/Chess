@@ -118,8 +118,9 @@ public class Chessman : MonoBehaviour
 
         for (int i = 0; i < movePlates.Length; i++)
         {
-            Destroy(movePlates[i]);
+            DestroyImmediate(movePlates[i]);
         }
+
 
     }
 

@@ -47,6 +47,8 @@ public class MovePlate : MonoBehaviour
             {
                 controller.GetComponent<Game>().Winner("white");
             }
+
+            
         }
         
 

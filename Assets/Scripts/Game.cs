@@ -140,58 +140,83 @@ public class Game : MonoBehaviour
 
         if (currentPlayer == "black")
         {
+            List<GameObject> movablePieces = new List<GameObject>();
 
-            for (int i = 0; i < playerBlack.Length; i++)
+            // Find all black pieces with valid moves
+            foreach (GameObject piece in playerBlack)
             {
-                int canMove = Random.Range(0, 2);
-
-                if (canMove == 1)
+                if (piece == null)
                 {
-                    Chessman cm = playerBlack[i].GetComponent<Chessman>();
-                    cm.DestroyMovePlates();
-                    //cm.InitiateMovePlates();
-                    
-                    GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-                    
-                    Debug.Log(playerBlack[i].name + " -- " + movePlates.Length);
-                    if (movePlates.Length == 0)
-                    {
-                        continue;
-                    }
-
-
-                    //int randomPositionIndex = Random.Range(0, movePlates.Length);
-
-                    //MovePlate mp = movePlates[randomPositionIndex].GetComponent<MovePlate>();
-
-
-                    // SetPositionEmpty // set previous position to empty
-                    // (cm.GetXBoard(), cm.GetZBoard());
-
-                    //cm.SetXBoard(mp.matrixX); // set new position
-                    //cm.SetZBoard(mp.matrixZ);
-                    //cm.SetCoords();
-
-                    //SetPosition(cm.gameObject);
-
-                    //cm.DestroyMovePlates();
-                    //moveSounds.GetComponent<MoveSounds>().Sounds();
-                    NextTurn();
-
-
-                    cm.pawnFirstMove = false;
-
-                    break;
+                    continue;
                 }
+                Chessman cm = piece.GetComponent<Chessman>();
+                cm.DestroyMovePlates();
+                cm.InitiateMovePlates();
+                if (GameObject.FindGameObjectsWithTag("MovePlate").Length > 0)
+                {
+                    movablePieces.Add(piece);
+                }
+            }
+
+            if (movablePieces.Count > 0)
+            {
+                // Move a random piece
+                int randomPieceIndex = Random.Range(0, movablePieces.Count);
+                Chessman cm = movablePieces[randomPieceIndex].GetComponent<Chessman>();
+               
+                cm.DestroyMovePlates();
+                cm.InitiateMovePlates();
+                MovePlate[] movePlates = FindObjectsOfType<MovePlate>();
+
+                int MoveIndex = 0;
+
+                for (int i = 0; i < movePlates.Length; i++)
+                {
+                    if (movePlates[i].attack == true) 
+                    {
+                        MoveIndex = i;
+                        break;
+                    }
+                    else 
+                    {
+                        MoveIndex = Random.Range(0, movePlates.Length);
+                        break;
+                    }
+                }
+                
+       
+                
+                GameObject targetPiece = GetPosition(movePlates[MoveIndex].matrixX, movePlates[MoveIndex].matrixZ);
+                DestroyImmediate(targetPiece);
+                MovePiece(cm, movePlates[MoveIndex]);
+            }
+            else
+            {
+                // No valid moves for black, skip turn
+                NextTurn();
             }
         }
 
+        
 
+    }
+
+    private void MovePiece(Chessman cm, MovePlate mp)
+    {
+        SetPositionEmpty(cm.GetXBoard(), cm.GetZBoard());
+        cm.SetXBoard(mp.matrixX);
+        cm.SetZBoard(mp.matrixZ);
+        cm.SetCoords();
+        SetPosition(cm.gameObject);
+        cm.DestroyMovePlates();
+        //moveSounds.GetComponent<MoveSounds>().Sounds();
+        NextTurn();
+        cm.pawnFirstMove = false;
     }
 
 
 
-  
+
 
 }
  
