@@ -17,6 +17,7 @@ public class MovePlate : MonoBehaviour
     public bool attack = false;
 
 
+
     public void Start()
     {
         if (attack)
@@ -64,11 +65,33 @@ public class MovePlate : MonoBehaviour
         controller.GetComponent<Game>().SetPosition(reference);
 
         moveSounds.GetComponent<MoveSounds>().Sounds();
-        controller.GetComponent<Game>().NextTurn();
+        GameObject chessPiece1 = controller.GetComponent<Game>().GetPosition(matrixX, matrixZ);
+        if (chessPiece1.name == "White_Pawn")
+        {
+            if (reference.GetComponent<Chessman>().GetZBoard() == 7)
+            {
+                GameObject whiteRook = controller.GetComponent<Game>().Create("White_Rook", reference.GetComponent<Chessman>().GetXBoard(), 7);
+                Destroy(chessPiece1);
+                controller.GetComponent<Game>().SetPosition(whiteRook);
 
+            }
+        }
+
+        if (chessPiece1.name == "Black_Pawn")
+        {
+            if (reference.GetComponent<Chessman>().GetZBoard() == 0)
+            {
+                GameObject blackRook = controller.GetComponent<Game>().Create("Black_Rook", reference.GetComponent<Chessman>().GetXBoard(), 0);
+                Destroy(chessPiece1);
+                controller.GetComponent<Game>().SetPosition(blackRook);
+
+            }
+        }
 
         reference.GetComponent<Chessman>().DestroyMovePlates();
         reference.GetComponent<Chessman>().pawnFirstMove = false;
+        controller.GetComponent<Game>().NextTurn();
+
     }
 
     public void SetCoords(int x, int z)
@@ -86,6 +109,9 @@ public class MovePlate : MonoBehaviour
     {
         return reference;
     }
+
+
+
 
 
 }

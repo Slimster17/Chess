@@ -14,14 +14,18 @@ public class Chessman : MonoBehaviour
 
     // player color
     private string player;
-    private bool isAI = false;
+
 
     // References for all chess models
     public Mesh king, queen, knight, bishop, rook, pawn;
 
 
+    // Check if pawn made a move
     public bool pawnFirstMove = true;
 
+
+    // Weight of chess piece
+    int weight;
 
     public void Activate() 
     {
@@ -31,44 +35,50 @@ public class Chessman : MonoBehaviour
 
         switch (this.name) 
         {
-            case "White_Rook": this.GetComponent<MeshFilter>().mesh = rook; player = "white"; break;
-            case "White_Knight": this.GetComponent<MeshFilter>().mesh = knight; player = "white"; break;
-            case "White_Bishop": this.GetComponent<MeshFilter>().mesh = bishop; player = "white"; break;
-            case "White_King": this.GetComponent<MeshFilter>().mesh = king; player = "white"; break;
-            case "White_Queen": this.GetComponent<MeshFilter>().mesh = queen; player = "white"; break;
-            case "White_Pawn": this.GetComponent<MeshFilter>().mesh = pawn; player = "white"; break;
+            case "White_Rook": this.GetComponent<MeshFilter>().mesh = rook; player = "white"; weight = 525; break;
+            case "White_Knight": this.GetComponent<MeshFilter>().mesh = knight; player = "white"; weight = 350; break;
+            case "White_Bishop": this.GetComponent<MeshFilter>().mesh = bishop; player = "white"; weight = 350; break;
+            case "White_King": this.GetComponent<MeshFilter>().mesh = king; player = "white"; weight = 10000; break;
+            case "White_Queen": this.GetComponent<MeshFilter>().mesh = queen; player = "white"; weight = 1000; break;
+            case "White_Pawn": this.GetComponent<MeshFilter>().mesh = pawn; player = "white"; weight = 100; break;
 
             case "Black_Rook":
                 this.GetComponent<MeshFilter>().mesh = rook;
                 this.BlackFigure();
                 player = "black";
+                weight = 525;
                 break;
             case "Black_Knight":
                 this.GetComponent<MeshFilter>().mesh = knight;
                 this.BlackFigure();
                 player = "black";
+                weight = 350;
                 break;
 
             case "Black_Bishop":
                 this.GetComponent<MeshFilter>().mesh = bishop;
                 this.BlackFigure();
                 player = "black";
+                weight = 350;
                 break;
 
             case "Black_King":
                 this.GetComponent<MeshFilter>().mesh = king;
                 this.BlackFigure();
                 player = "black";
+                weight = 10000;
                 break;
             case "Black_Queen":
                 this.GetComponent<MeshFilter>().mesh = queen;
                 this.BlackFigure();
                 player = "black";
+                weight = 1000;
                 break;
             case "Black_Pawn":
                 this.GetComponent<MeshFilter>().mesh = pawn;
                 this.BlackFigure();
                 player = "black";
+                weight = 100;
                 break;
 
         }
@@ -171,6 +181,7 @@ public class Chessman : MonoBehaviour
                 break;
 
             case "White_Pawn":
+
                 PawnMovePlate(xBoard, zBoard + 1);
 
                 break;
@@ -285,6 +296,16 @@ public class Chessman : MonoBehaviour
             {
                 MovePlateSpawn(x - 1, z, true);
             }
+
+
+            //if (GetZBoard() == 7 && sc.GetCurrentPlayer() == "white")
+            //{
+            //    DestroyMovePlates();
+            //    Destroy(gameObject); // Destroy the pawn game object
+            //    sc.Create("White_Rook", x, 7); // Create a white rook at the pawn's position
+            //}
+
+
         }
     }
 
@@ -315,6 +336,11 @@ public class Chessman : MonoBehaviour
     public string GetPlayer() 
     {
         return player;
+    }
+
+    public int GetWeight() 
+    {
+        return weight;
     }
 
     

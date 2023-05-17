@@ -8,6 +8,8 @@ TagManager:
   - WinnerText
   - RestartText
   - MoveSounds
+  - WhiteToggle
+  - BlackToggle
   layers:
   - Default
   - TransparentFX
